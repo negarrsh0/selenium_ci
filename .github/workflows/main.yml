@@ -1,24 +1,36 @@
+name: Selenium Tests
+
+on:
+  push:
+    branches: [ master ]   # یا نام branch اصلی پروژه‌ت
+  pull_request:
+    branches: [ master ]
+
 jobs:
   selenium:
     runs-on: windows-latest
 
     steps:
+      # 1️⃣ گرفتن آخرین نسخه پروژه
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ نصب Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
+      # 3️⃣ نصب وابستگی‌ها (Selenium و pytest)
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # 4️⃣ نصب ChromeDriver (Chrome باید از قبل روی Windows Runner موجود باشه)
       - name: Setup ChromeDriver
         uses: nanasess/setup-chromedriver@v1
 
+      # 5️⃣ اجرای تست‌ها
       - name: Run Selenium tests
         run: pytest tests/ --maxfail=1 --disable-warnings -q
-
